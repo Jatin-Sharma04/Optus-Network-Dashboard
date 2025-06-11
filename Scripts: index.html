@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Optus Field Technician Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 0; }
+        h1 { text-align: center; margin-top: 20px; }
+        .container { width: 90%; margin: auto; }
+        .status-table, .qa-table { width: 100%; border-collapse: collapse; margin: 20px 0; background: #fff; }
+        .status-table th, .status-table td, .qa-table th, .qa-table td { border: 1px solid #ccc; padding: 12px; text-align: center; }
+        .Operational { background-color: #c8e6c9; }
+        .Degraded { background-color: #fff9c4; }
+        .Partial\ Outage { background-color: #ffe0b2; }
+        .Outage { background-color: #ffcdd2; }
+        .Maintenance { background-color: #d1c4e9; }
+        iframe { width: 100%; height: 450px; border: none; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Optus Network Live Dashboard</h1>
+
+    <div class="container">
+
+        <h2>Current Service Status</h2>
+        <table class="status-table" id="status-table">
+            <thead>
+                <tr><th>Service</th><th>Status</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <h2>Optus Booragoon Location (Garden City)</h2>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3432.882539750146!2d115.8226233149443!3d-32.04092788093467!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2a32bc7cd6ffdfb5%3A0x7b599cb1c8e17175!2sOptus%20Booragoon!5e0!3m2!1sen!2sau!4v1622170000000!5m2!1sen!2sau" allowfullscreen></iframe>
+
+        <h2>Internal Technician Q&A</h2>
+        <table class="qa-table">
+            <thead>
+                <tr><th>Question</th><th>Response</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Outage reported in Fremantle?</td><td>Under investigation, ETA 2 hours resolution.</td></tr>
+                <tr><td>Billing platform error?</td><td>Issue resolved as of 10:00 AM AEST.</td></tr>
+                <tr><td>Signal issue at Canning Vale?</td><td>5G Tower maintenance scheduled until 3 PM AEST.</td></tr>
+                <tr><td>Fiber cut near Mandurah?</td><td>Emergency crew dispatched, estimated 4-hour fix.</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+<script>
+async function loadStatus() {
+    const response = await fetch("/api/status");
+    const data = await response.json();
+    const tbody = document.querySelector("#status-table tbody");
+    tbody.innerHTML = "";
+    for (const [service, state] of Object.entries(data.services)) {
+        const row = `<tr><td>${service}</td><td class="${state.replace(' ', '\\ ')}">${state}</td></tr>`;
+        tbody.insertAdjacentHTML('beforeend', row);
+    }
+}
+setInterval(loadStatus, 5000);
+loadStatus();
+</script>
+
+</body>
+</html>
