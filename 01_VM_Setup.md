@@ -19,3 +19,8 @@ az vm create \
 --admin-username azureuser \
 --generate-ssh-keys \
 --public-ip-sku Standard
+
+az vm open-port --port 80 --resource-group OptusProject --name OptusTools
+az vm open-port --port 443 --resource-group OptusProject --name OptusTools
+az vm open-port --port 22 --resource-group OptusProject --name OptusTools
+
